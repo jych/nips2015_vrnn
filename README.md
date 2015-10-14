@@ -3,5 +3,5 @@ This is an implementation of the paper "A Recurrent Latent Variable Model for Se
 
 Dependencies
 ------------
-Most of the script files are written as pure Theano codes, moudles are implemented in a more general framework.
-You can find the codes at http://github.com/jych/cle.
+Most of the script files are written as pure Theano code, modules are implemented in a more general framework.
+You can find the code at http://github.com/jych/cle.
