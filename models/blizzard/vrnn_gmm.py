@@ -51,7 +51,7 @@ def main(args):
 
     print "trial no. %d" % trial
     print "batch size %d" % batch_size
-    print "learning rate %d" % lr
+    print "learning rate %f" % lr
     print "saving pkl file '%s'" % pkl_name
     print "to the save path '%s'" % save_path
 
