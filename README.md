@@ -11,5 +11,7 @@ Notice
 ------
 The original Blizzard dataset should be downloaded by each user due to the license.
 http://www.synsig.org/index.php/Blizzard_Challenge_2013
+The original wave files have been read by numpy and saved into '.npz' format.
+There is a function that reads the numpy formatted files and generate a hdf5 format file.
 
 The experiments for the IAM-OnDB will be soon added.
