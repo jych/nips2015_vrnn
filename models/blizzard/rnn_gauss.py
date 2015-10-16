@@ -281,7 +281,7 @@ def main(args):
         lr=lr
     )
 
-    monitor_fn = theano.function(inputs=[x],
+    monitor_fn = theano.function(inputs=[m_x],
                                  outputs=[m_recon_term,
                                           max_theta_sig, mean_theta_sig, min_theta_sig,
                                           max_x, mean_x, min_x,

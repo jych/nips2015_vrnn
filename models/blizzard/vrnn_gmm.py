@@ -391,69 +391,62 @@ atch_size, x_dim), dtype=theano.config.floatX)
         k.default_update = v
 
     shared_updates[rnn_tm1] = s_temp[-1]
-    s_temp = s_temp[:-1]
-    s_shape = s_temp.shape
-    s_in = concatenate([s_0, s_t.reshape((s_shape[0]*s_shape[1], -1))], axis=0)
-    z_4_shape = z_4_temp.shape
-    z_4_in = z_4_temp.reshape((z_4_shape[0]*z_4_shape[1], -1))
-    theta_1_in = theta_1.fprop([z_4_in, s_in])
-    theta_2_in = theta_2.fprop([theta_1_in])
-    theta_3_in = theta_3.fprop([theta_2_in])
-    theta_4_in = theta_4.fprop([theta_3_in])
-    theta_mu_in = theta_mu.fprop([theta_4_in])
-    theta_sig_in = theta_sig.fprop([theta_4_in])
-    coeff_in = coeff.fprop([theta_4_in])
+    s_temp = concatenate([s_0[None, :, :], s_temp[:-1]], axis=0)
+    theta_1_temp = theta_1.fprop([z_4_temp, s_temp], params)
+    theta_2_temp = theta_2.fprop([theta_1_temp], params)
+    theta_3_temp = theta_3.fprop([theta_2_temp], params)
+    theta_4_temp = theta_4.fprop([theta_3_temp], params)
+    theta_mu_temp = theta_mu.fprop([theta_4_temp], params)
+    theta_sig_temp = theta_sig.fprop([theta_4_temp], params)
+    coeff_temp = coeff.fprop([theta_4_temp], params)
 
-    z_shape = phi_mu_temp.shape
-    phi_mu_in = phi_mu_temp.reshape((z_shape[0]*z_shape[1], -1))
-    phi_sig_in = phi_sig_temp.reshape((z_shape[0]*z_shape[1], -1))
-    prior_mu_in = prior_mu_temp.reshape((z_shape[0]*z_shape[1], -1))
-    prior_sig_in = prior_sig_temp.reshape((z_shape[0]*z_shape[1], -1))
-    kl_in = KLGaussianGaussian(phi_mu_in, phi_sig_in, prior_mu_in, prior_sig_in)
-    kl_temp = kl_in.reshape((z_shape[0], z_shape[1]))
+    kl_temp = KLGaussianGaussian(phi_mu_temp, phi_sig_temp, prior_mu_temp, prior_sig_temp)
 
+    x_shape = x.shape
+    x_in = x.reshape((x_shape[0]*x_shape[1], -1))
+    theta_mu_in = theta_mu_temp.reshape((x_shape[0]*x_shape[1], -1))
+    theta_sig_in = theta_sig_temp.reshape((x_shape[0]*x_shape[1], -1))
+    coeff_in = coeff_temp.reshape((x_shape[0]*x_shape[1], -1))
     recon = GMM(x_in, theta_mu_in, theta_sig_in, coeff_in)
-    recon = recon.reshape((x_shape[0], x_shape[1]))
     recon_term = recon.mean()
     kl_term = kl_temp.mean()
     nll_upper_bound = recon_term + kl_term
     nll_upper_bound.name = 'nll_upper_bound'
 
+    m_x_1_temp = x_1.fprop([m_x], params)
+    m_x_2_temp = x_2.fprop([m_x_1_temp], params)
+    m_x_3_temp = x_3.fprop([m_x_2_temp], params)
+    m_x_4_temp = x_4.fprop([m_x_3_temp], params)
+
     m_s_0 = rnn.get_init_state(m_batch_size)
 
     ((m_s_temp, m_phi_mu_temp, m_phi_sig_temp, m_prior_mu_temp, m_prior_sig_temp, m_z_4_temp), m_updates) =\
         theano.scan(fn=inner_fn,
-                    sequences=[x_4_in],
+                    sequences=[m_x_4_temp],
                     outputs_info=[m_s_0, None, None, None, None, None])
 
     for k, v in m_updates.iteritems():
         k.default_update = v
 
-    m_s_temp = m_s_temp[:-1]
-    m_s_shape = m_s_temp.shape
-    m_s_in = concatenate([m_s_0, m_s_temp.reshape((m_s_shape[0]*m_s_shape[1], -1))], axis=0)
-    m_z_4_shape = m_z_4_temp.shape
-    m_z_4_in = m_z_4_temp.reshape((m_z_4_shape[0]*m_z_4_shape[1], -1))
-    m_theta_1_in = theta_1.fprop([m_z_4_in, m_s_in])
-    m_theta_2_in = theta_2.fprop([m_theta_1_in])
-    m_theta_3_in = theta_3.fprop([m_theta_2_in])
-    m_theta_4_in = theta_4.fprop([m_theta_3_in])
-    m_theta_mu_in = theta_mu.fprop([m_theta_4_in])
-    m_theta_sig_in = theta_sig.fprop([m_theta_4_in])
-    m_coeff_in = coeff.fprop([m_theta_4_in])
+    m_s_temp = concatenate([m_s_0[None, :, :], m_s_temp[:-1]], axis=0)
+    m_theta_1_temp = theta_1.fprop([m_z_4_temp, m_s_temp], params)
+    m_theta_2_temp = theta_2.fprop([m_theta_1_temp], params)
+    m_theta_3_temp = theta_3.fprop([m_theta_2_temp], params)
+    m_theta_4_temp = theta_4.fprop([m_theta_3_temp], params)
+    m_theta_mu_temp = theta_mu.fprop([m_theta_4_temp], params)
+    m_theta_sig_temp = theta_sig.fprop([m_theta_4_temp], params)
+    m_coeff_temp = coeff.fprop([m_theta_4_temp], params)
 
-    m_z_shape = m_phi_mu_temp.shape
-    m_phi_mu_in = m_phi_mu_temp.reshape((m_z_shape[0]*m_z_shape[1], -1))
-    m_phi_sig_in = m_phi_sig_temp.reshape((m_z_shape[0]*m_z_shape[1], -1))
-    m_prior_mu_in = m_prior_mu_temp.reshape((m_z_shape[0]*m_z_shape[1], -1))
-    m_prior_sig_in = m_prior_sig_temp.reshape((m_z_shape[0]*m_z_shape[1], -1))
-    m_kl_in = KLGaussianGaussian(m_phi_mu_in, m_phi_sig_in, m_prior_mu_in, m_prior_sig_in)
-    m_kl_temp = m_kl_in.reshape((m_z_shape[0], m_z_shape[1]))
+    m_kl_temp = KLGaussianGaussian(m_phi_mu_temp, m_phi_sig_temp, m_prior_mu_temp, m_prior_sig_temp)
 
-    m_recon = GMM(x_in, m_theta_mu_in, m_theta_sig_in, m_coeff_in)
-    m_recon = m_recon.reshape((x_shape[0], x_shape[1]))
+    m_x_shape = x.shape
+    m_x_in = m_x.reshape((m_x_shape[0]*m_x_shape[1], -1))
+    m_theta_mu_in = m_theta_mu_temp.reshape((m_x_shape[0]*m_x_shape[1], -1))
+    m_theta_sig_in = m_theta_sig_temp.reshape((m_x_shape[0]*m_x_shape[1], -1))
+    m_coeff_in = m_coeff_temp.reshape((m_x_shape[0]*m_x_shape[1], -1))
+    m_recon = GMM(m_x_in, m_theta_mu_in, m_theta_sig_in, m_coeff_in)
     m_recon_term = m_recon.mean()
-    m_kl_term = m_kl_temp.mean()
+    m_kl_term = kl_temp.mean()
     m_nll_upper_bound = m_recon_term + m_kl_term
     m_nll_upper_bound.name = 'nll_upper_bound'
     m_recon_term.name = 'recon_term'
@@ -503,7 +496,7 @@ atch_size, x_dim), dtype=theano.config.floatX)
         lr=lr
     )
 
-    monitor_fn = theano.function(inputs=[x],
+    monitor_fn = theano.function(inputs=[m_x],
                                  outputs=[m_nll_upper_bound, m_recon_term, m_kl_term,
                                           max_phi_sig, mean_phi_sig, min_phi_sig,
                                           max_prior_sig, mean_prior_sig, min_prior_sig,

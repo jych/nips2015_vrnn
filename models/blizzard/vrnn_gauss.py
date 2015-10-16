@@ -393,11 +393,16 @@ def main(args):
     nll_upper_bound = recon_term + kl_term
     nll_upper_bound.name = 'nll_upper_bound'
 
+    m_x_1_temp = x_1.fprop([m_x], params)
+    m_x_2_temp = x_2.fprop([m_x_1_temp], params)
+    m_x_3_temp = x_3.fprop([m_x_2_temp], params)
+    m_x_4_temp = x_4.fprop([m_x_3_temp], params)
+
     m_s_0 = rnn.get_init_state(m_batch_size)
 
     ((m_s_temp, m_phi_mu_temp, m_phi_sig_temp, m_prior_mu_temp, m_prior_sig_temp, m_z_4_temp), m_updates) =\
         theano.scan(fn=inner_fn,
-                    sequences=[x_4_temp],
+                    sequences=[m_x_4_temp],
                     outputs_info=[m_s_0, None, None, None, None, None])
 
     for k, v in m_updates.iteritems():
@@ -465,7 +470,7 @@ def main(args):
         lr=lr
     )
 
-    monitor_fn = theano.function(inputs=[x],
+    monitor_fn = theano.function(inputs=[m_x],
                                  outputs=[m_nll_upper_bound, m_recon_term, m_kl_term,
                                           max_phi_sig, mean_phi_sig, min_phi_sig,
                                           max_prior_sig, mean_prior_sig, min_prior_sig,
