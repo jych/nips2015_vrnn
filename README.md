@@ -12,4 +12,4 @@ Notice
 The original Blizzard dataset should be downloaded by each user due to the license.
 http://www.synsig.org/index.php/Blizzard_Challenge_2013
 
-The experiments for the IAM-OnDB will be soon updated.
+The experiments for the IAM-OnDB will be soon added.
