@@ -2,7 +2,6 @@ trial 1
 data_path /data/lisatmp3/chungjun/data/blizzard_unseg/
 save_path /data/lisatmp/chungjun/iclr2016/blizzard/baseline/
 sample_path /data/lisatmp/chungjun/iclr2016/blizzard/baseline/sample/
-channel_name valid_nll_upper_bound
 monitoring_freq 2000
 reset_freq 4
 epoch 10

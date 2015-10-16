@@ -31,8 +31,8 @@ def main(args):
 
     trial = int(args['trial'])
     pkl_name = 'vrnn_gauss_%d' % trial
+    channel_name = 'valid_nll_upper_bound'
 
-    channel_name = args['channel_name']
     data_path = args['data_path']
     save_path = args['save_path']
 
@@ -45,11 +45,6 @@ def main(args):
     x_dim = int(args['x_dim'])
     z_dim = int(args['z_dim'])
     rnn_dim = int(args['rnn_dim'])
-    q_z_dim = int(args['q_z_dim'])
-    p_z_dim = int(args['p_z_dim'])
-    p_x_dim = int(args['p_x_dim'])
-    x2s_dim = int(args['z2s_dim'])
-    z2s_dim = int(args['x2s_dim'])
     lr = float(args['lr'])
     debug = int(args['debug'])
 
@@ -64,6 +59,7 @@ def main(args):
     p_x_dim = 600
     x2s_dim = 600
     z2s_dim = 500
+    target_dim = x_dim
 
     file_name = 'blizzard_unseg_tbptt'
     normal_params = np.load(data_path + file_name + '_normal.npz')
@@ -303,7 +299,7 @@ def main(args):
     theta_mu = FullyConnectedLayer(name='theta_mu',
                                    parent=['theta_4'],
                                    parent_dim=[p_x_dim],
-                                   nout=x_dim,
+                                   nout=target_dim,
                                    unit='linear',
                                    init_W=init_W,
                                    init_b=init_b)
@@ -311,7 +307,7 @@ def main(args):
     theta_sig = FullyConnectedLayer(name='theta_sig',
                                     parent=['theta_4'],
                                     parent_dim=[p_x_dim],
-                                    nout=x_dim,
+                                    nout=target_dim,
                                     unit='softplus',
                                     cons=1e-4,
                                     init_W=init_W,
@@ -490,7 +486,7 @@ def main(args):
                           max_x, mean_x, min_x,
                           max_theta_mu, mean_theta_mu, min_theta_mu],
                    data=[Iterator(train_data, m_batch_size, start=0, end=112640),
-                         Iterator(valid_data, m_batch_size, start=2040064, end=2152704)])
+                         Iterator(valid_data, m_batch_size, start=2040064, end=2152704)]),
         Picklize(freq=monitoring_freq, force_save_freq=force_saving_freq, path=save_path),
         EarlyStopping(freq=monitoring_freq, force_save_freq=force_saving_freq, path=save_path, channel=channel_name),
         WeightNorm()
