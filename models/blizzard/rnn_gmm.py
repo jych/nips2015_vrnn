@@ -19,7 +19,7 @@ from cle.cle.train.ext import (
     WeightNorm
 )
 from cle.cle.train.opt import Adam
-from cle.cle.utils import sharedX
+from cle.cle.utils import init_tparams, sharedX
 from cle.cle.utils.compat import OrderedDict
 from cle.cle.utils.gpu_op import concatenate
 

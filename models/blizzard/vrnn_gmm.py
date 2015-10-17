@@ -19,7 +19,7 @@ from cle.cle.train.ext import (
     WeightNorm
 )
 from cle.cle.train.opt import Adam
-from cle.cle.utils import sharedX
+from cle.cle.utils import init_tparams, sharedX
 from cle.cle.utils.compat import OrderedDict
 from cle.cle.utils.op import Gaussian_sample
 from cle.cle.utils.gpu_op import concatenate
@@ -88,8 +88,6 @@ def main(args):
     if debug:
         x.tag.test_value = np.zeros((15, batch_size, x_dim), dtype=theano.config.floatX)
         m_x.tag.test_value = np.zeros((15, m_batch_size, x_dim), dtype=theano.config.floatX)
-
-atch_size, x_dim), dtype=theano.config.floatX)
 
     init_W = InitCell('rand')
     init_U = InitCell('ortho')
@@ -324,7 +322,7 @@ atch_size, x_dim), dtype=theano.config.floatX)
                                 init_W=init_W,
                                 init_b=init_b)
 
-    nodes = [rnn,,
+    nodes = [rnn,
              x_1, x_2, x_3, x_4,
              z_1, z_2, z_3, z_4,
              phi_1, phi_2, phi_3, phi_4, phi_mu, phi_sig,
@@ -475,16 +473,16 @@ atch_size, x_dim), dtype=theano.config.floatX)
     mean_theta_sig.name = 'mean_theta_sig'
     min_theta_sig.name = 'min_theta_sig'
 
-    max_phi_sig = m_phi_sig_in.max()
-    mean_phi_sig = m_phi_sig_in.mean()
-    min_phi_sig = m_phi_sig_in.min()
+    max_phi_sig = m_phi_sig_temp.max()
+    mean_phi_sig = m_phi_sig_temp.mean()
+    min_phi_sig = m_phi_sig_temp.min()
     max_phi_sig.name = 'max_phi_sig'
     mean_phi_sig.name = 'mean_phi_sig'
     min_phi_sig.name = 'min_phi_sig'
 
-    max_prior_sig = m_prior_sig_in.max()
-    mean_prior_sig = m_prior_sig_in.mean()
-    min_prior_sig = m_prior_sig_in.min()
+    max_prior_sig = m_prior_sig_temp.max()
+    mean_prior_sig = m_prior_sig_temp.mean()
+    min_prior_sig = m_prior_sig_temp.min()
     max_prior_sig.name = 'max_prior_sig'
     mean_prior_sig.name = 'mean_prior_sig'
     min_prior_sig.name = 'min_prior_sig'
