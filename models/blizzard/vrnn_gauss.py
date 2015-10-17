@@ -418,7 +418,7 @@ def main(args):
 
     m_kl_temp = KLGaussianGaussian(m_phi_mu_temp, m_phi_sig_temp, m_prior_mu_temp, m_prior_sig_temp)
 
-    m_recon = Gaussian(x, m_theta_mu_temp, m_theta_sig_temp)
+    m_recon = Gaussian(m_x, m_theta_mu_temp, m_theta_sig_temp)
     m_recon_term = m_recon.mean()
     m_kl_term = m_kl_temp.mean()
     m_nll_upper_bound = m_recon_term + m_kl_term

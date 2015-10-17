@@ -238,20 +238,25 @@ def main(args):
     theta_sig_temp = theta_sig.fprop([theta_4_temp], params)
     coeff_temp = coeff.fprop([theta_4_temp])
 
-    x_in = x.reshape((x.shape[0]*x.shape[1], -1))
-    theta_mu_in = theta_mu_temp.reshape((x.shape[0]*x.shape[1], -1))
-    theta_sig_in = theta_sig_temp.reshape((x.shape[0]*x.shape[1], -1))
-    coeff_in = coeff.reshape((x.shape[0]*x.shape[1], -1))
+    x_shape = x.shape
+    x_in = x.reshape((x_shape[0]*x_shape[1], -1))
+    theta_mu_in = theta_mu_temp.reshape((x_shape[0]*x_shape[1], -1))
+    theta_sig_in = theta_sig_temp.reshape((x_shape[0]*x_shape[1], -1))
+    coeff_in = coeff_temp.reshape((x_shape[0]*x_shape[1], -1))
 
-    recon = GMM(x_temp, theta_mu_temp, theta_sig_temp, coeff_temp)
-    recon = recon.reshape((x_shape[0], x_shape[1]))
+    recon = GMM(x_in, theta_mu_in, theta_sig_in, coeff_in)
     recon_term = recon.mean()
     recon_term.name = 'nll'
+
+    m_x_1_temp = x_1.fprop([m_x], params)
+    m_x_2_temp = x_2.fprop([m_x_1_temp], params)
+    m_x_3_temp = x_3.fprop([m_x_2_temp], params)
+    m_x_4_temp = x_4.fprop([m_x_3_temp], params)
 
     m_s_0 = rnn.get_init_state(m_batch_size)
 
     (m_s_temp, m_updates) = theano.scan(fn=inner_fn,
-                                        sequences=[x_4_temp],
+                                        sequences=[m_x_4_temp],
                                         outputs_info=[m_s_0])
 
     for k, v in m_updates.iteritems():
@@ -266,12 +271,13 @@ def main(args):
     m_theta_sig_temp = theta_sig.fprop([m_theta_4_temp])
     m_coeff_temp = coeff.fprop([m_theta_4_temp])
 
-    m_theta_mu_in = m_theta_mu_temp.reshape((x.shape[0]*x.shape[1], -1))
-    m_theta_sig_in = m_theta_sig_temp.reshape((x.shape[0]*x.shape[1], -1))
-    m_coeff_in = m_coeff.reshape((x.shape[0]*x.shape[1], -1))
+    m_x_shape = m_x.shape
+    m_x_in = m_x.reshape((m_x_shape[0]*m_x_shape[1], -1))
+    m_theta_mu_in = m_theta_mu_temp.reshape((m_x_shape[0]*m_x_shape[1], -1))
+    m_theta_sig_in = m_theta_sig_temp.reshape((m_x_shape[0]*m_x_shape[1], -1))
+    m_coeff_in = m_coeff_temp.reshape((m_x_shape[0]*m_x_shape[1], -1))
 
-    m_recon = GMM(x_in, m_theta_mu_in, m_theta_sig_in, m_coeff_in)
-    m_recon = m_recon.reshape((x_shape[0], x_shape[1]))
+    m_recon = GMM(m_x_in, m_theta_mu_in, m_theta_sig_in, m_coeff_in)
     m_recon_term = m_recon.mean()
     m_recon_term.name = 'nll'
 

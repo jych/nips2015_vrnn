@@ -407,6 +407,7 @@ atch_size, x_dim), dtype=theano.config.floatX)
     theta_mu_in = theta_mu_temp.reshape((x_shape[0]*x_shape[1], -1))
     theta_sig_in = theta_sig_temp.reshape((x_shape[0]*x_shape[1], -1))
     coeff_in = coeff_temp.reshape((x_shape[0]*x_shape[1], -1))
+
     recon = GMM(x_in, theta_mu_in, theta_sig_in, coeff_in)
     recon_term = recon.mean()
     kl_term = kl_temp.mean()
@@ -439,11 +440,12 @@ atch_size, x_dim), dtype=theano.config.floatX)
 
     m_kl_temp = KLGaussianGaussian(m_phi_mu_temp, m_phi_sig_temp, m_prior_mu_temp, m_prior_sig_temp)
 
-    m_x_shape = x.shape
+    m_x_shape = m_x.shape
     m_x_in = m_x.reshape((m_x_shape[0]*m_x_shape[1], -1))
     m_theta_mu_in = m_theta_mu_temp.reshape((m_x_shape[0]*m_x_shape[1], -1))
     m_theta_sig_in = m_theta_sig_temp.reshape((m_x_shape[0]*m_x_shape[1], -1))
     m_coeff_in = m_coeff_temp.reshape((m_x_shape[0]*m_x_shape[1], -1))
+
     m_recon = GMM(m_x_in, m_theta_mu_in, m_theta_sig_in, m_coeff_in)
     m_recon_term = m_recon.mean()
     m_kl_term = kl_temp.mean()

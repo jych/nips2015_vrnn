@@ -230,10 +230,15 @@ def main(args):
     recon_term = recon.mean()
     recon_term.name = 'nll'
 
+    m_x_1_temp = x_1.fprop([m_x], params)
+    m_x_2_temp = x_2.fprop([m_x_1_temp], params)
+    m_x_3_temp = x_3.fprop([m_x_2_temp], params)
+    m_x_4_temp = x_4.fprop([m_x_3_temp], params)
+
     m_s_0 = rnn.get_init_state(m_batch_size)
 
     (m_s_temp, m_updates) = theano.scan(fn=inner_fn,
-                                        sequences=[x_4_temp],
+                                        sequences=[m_x_4_temp],
                                         outputs_info=[m_s_0])
 
     for k, v in m_updates.iteritems():
@@ -247,7 +252,7 @@ def main(args):
     m_theta_mu_temp = theta_mu.fprop([m_theta_4_temp], params)
     m_theta_sig_temp = theta_sig.fprop([m_theta_4_temp], params)
 
-    m_recon = Gaussian(x, m_theta_mu_temp, m_theta_sig_temp)
+    m_recon = Gaussian(m_x, m_theta_mu_temp, m_theta_sig_temp)
     m_recon_term = m_recon.mean()
     m_recon_term.name = 'nll'
 
