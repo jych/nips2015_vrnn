@@ -236,7 +236,7 @@ def main(args):
     theta_4_temp = theta_4.fprop([theta_3_temp], params)
     theta_mu_temp = theta_mu.fprop([theta_4_temp], params)
     theta_sig_temp = theta_sig.fprop([theta_4_temp], params)
-    coeff_temp = coeff.fprop([theta_4_temp])
+    coeff_temp = coeff.fprop([theta_4_temp], params)
 
     x_shape = x.shape
     x_in = x.reshape((x_shape[0]*x_shape[1], -1))
@@ -263,13 +263,13 @@ def main(args):
         k.default_update = v
 
     m_s_temp = T.concatenate([m_s_0[None, :, :], m_s_temp[:-1]], axis=0)
-    m_theta_1_temp = theta_1.fprop([m_s_temp])
-    m_theta_2_temp = theta_2.fprop([m_theta_1_temp])
-    m_theta_3_temp = theta_3.fprop([m_theta_2_temp])
-    m_theta_4_temp = theta_4.fprop([m_theta_3_temp])
-    m_theta_mu_temp = theta_mu.fprop([m_theta_4_temp])
-    m_theta_sig_temp = theta_sig.fprop([m_theta_4_temp])
-    m_coeff_temp = coeff.fprop([m_theta_4_temp])
+    m_theta_1_temp = theta_1.fprop([m_s_temp], params)
+    m_theta_2_temp = theta_2.fprop([m_theta_1_temp], params)
+    m_theta_3_temp = theta_3.fprop([m_theta_2_temp], params)
+    m_theta_4_temp = theta_4.fprop([m_theta_3_temp], params)
+    m_theta_mu_temp = theta_mu.fprop([m_theta_4_temp], params)
+    m_theta_sig_temp = theta_sig.fprop([m_theta_4_temp], params)
+    m_coeff_temp = coeff.fprop([m_theta_4_temp], params)
 
     m_x_shape = m_x.shape
     m_x_in = m_x.reshape((m_x_shape[0]*m_x_shape[1], -1))
