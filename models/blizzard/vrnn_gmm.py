@@ -446,7 +446,7 @@ def main(args):
 
     m_recon = GMM(m_x_in, m_theta_mu_in, m_theta_sig_in, m_coeff_in)
     m_recon_term = m_recon.mean()
-    m_kl_term = kl_temp.mean()
+    m_kl_term = m_kl_temp.mean()
     m_nll_upper_bound = m_recon_term + m_kl_term
     m_nll_upper_bound.name = 'nll_upper_bound'
     m_recon_term.name = 'recon_term'
