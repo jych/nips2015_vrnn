@@ -321,9 +321,11 @@ def main(args):
              theta_1, theta_2, theta_3, theta_4, theta_mu, theta_sig]
 
     params = OrderedDict()
+
     for node in nodes:
         if node.initialize() is not None:
             params.update(node.initialize())
+
     params = init_tparams(params)
 
     step_count = sharedX(0, name='step_count')
