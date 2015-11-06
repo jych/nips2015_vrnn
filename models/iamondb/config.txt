@@ -1,0 +1,13 @@
+trial 1
+data_path /data/lisatmp3/iamondb/
+save_path /data/lisatmp/chungjun/nips2015/iamondb/
+sample_path /data/lisatmp/chungjun/nips2015/iamondb/sample/
+monitoring_freq 100
+epoch 1000
+batch_size 20
+x_dim 3
+z_dim 50
+num_k 20
+rnn_dim 1200
+lr 0.0003
+debug 1
