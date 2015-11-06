@@ -1,4 +1,4 @@
-# Variational Recurrent Neural Network
+# Variational Recurrent Neural Networks
 This is an implementation of the paper "A Recurrent Latent Variable Model for Sequential Data".
 http://arxiv.org/abs/1506.02216
 
@@ -13,5 +13,3 @@ The original Blizzard dataset should be downloaded by each user due to the licen
 http://www.synsig.org/index.php/Blizzard_Challenge_2013<br>
 The original wave files have been read by numpy and saved into '.npz' format.
 There is a function that reads the numpy formatted files and generate a hdf5 format file.
-
-The experiments for the IAM-OnDB will be added soon.
