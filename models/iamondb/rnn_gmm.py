@@ -232,7 +232,7 @@ def main(args):
     coeff_mean_min.name = 'coeff_mean_min'
 
     model.inputs = [x, mask]
-    model._params = params
+    model.params = params
     model.nodes = nodes
 
     optimizer = Adam(

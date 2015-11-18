@@ -313,7 +313,7 @@ def main(args):
     min_prior_sig.name = 'min_prior_sig'
 
     model.inputs = [x, mask]
-    model._params = params
+    model.params = params
     model.nodes = nodes
 
     optimizer = Adam(

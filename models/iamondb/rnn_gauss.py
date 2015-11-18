@@ -212,7 +212,7 @@ def main(args):
     min_theta_sig.name = 'min_theta_sig'
 
     model.inputs = [x, mask]
-    model._params = params
+    model.params = params
     model.nodes = nodes
 
     optimizer = Adam(
