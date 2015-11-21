@@ -1,7 +1,7 @@
 trial 1
-data_path /data/lisatmp3/iamondb/
-save_path /data/lisatmp/chungjun/nips2015/iamondb/
-sample_path /data/lisatmp/chungjun/nips2015/iamondb/sample/
+data_path /raid/chungjun/data/iamondb/
+save_path /raid/chungjun/nips2015/iamondb/
+sample_path /raid/chungjun/nips2015/iamondb/sample/
 monitoring_freq 100
 epoch 1000
 batch_size 20

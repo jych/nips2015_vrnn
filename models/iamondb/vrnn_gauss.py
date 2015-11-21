@@ -243,7 +243,7 @@ def main(args):
     ((s_temp, phi_mu_temp, phi_sig_temp, prior_mu_temp, prior_sig_temp, z_1_temp), updates) =\
         theano.scan(fn=inner_fn,
                     sequences=[x_1_temp],
-                    outputs_info=[s_0, None, None, None, None])
+                    outputs_info=[s_0, None, None, None, None, None])
 
     for k, v in updates.iteritems():
         k.default_update = v
