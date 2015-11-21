@@ -318,16 +318,16 @@ def main(args):
     coeff_mean_max.name = 'coeff_mean_max'
     coeff_mean_min.name = 'coeff_mean_min'
 
-    max_phi_sig = phi_sig_t.max()
-    mean_phi_sig = phi_sig_t.mean()
-    min_phi_sig = phi_sig_t.min()
+    max_phi_sig = phi_sig_temp.max()
+    mean_phi_sig = phi_sig_temp.mean()
+    min_phi_sig = phi_sig_temp.min()
     max_phi_sig.name = 'max_phi_sig'
     mean_phi_sig.name = 'mean_phi_sig'
     min_phi_sig.name = 'min_phi_sig'
 
-    max_prior_sig = prior_sig_t.max()
-    mean_prior_sig = prior_sig_t.mean()
-    min_prior_sig = prior_sig_t.min()
+    max_prior_sig = prior_sig_temp.max()
+    mean_prior_sig = prior_sig_temp.mean()
+    min_prior_sig = prior_sig_temp.min()
     max_prior_sig.name = 'max_prior_sig'
     mean_prior_sig.name = 'mean_prior_sig'
     min_prior_sig.name = 'min_prior_sig'
