@@ -229,7 +229,7 @@ def main(args):
                           max_theta_mu, mean_theta_mu, min_theta_mu],
                    data=[Iterator(valid_data, batch_size)]),
         Picklize(freq=monitoring_freq, path=save_path),
-        EarlyStopping(freq=monitoring_freq, path=save_path, channel_name=channel_name),
+        EarlyStopping(freq=monitoring_freq, path=save_path, channel=channel_name),
         WeightNorm()
     ]
 
