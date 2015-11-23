@@ -200,7 +200,7 @@ def main(args):
     corr = FullyConnectedLayer(name='corr',
                                parent=['theta_1'],
                                parent_dim=[p_x_dim],
-                               nout=1,
+                               nout=k,
                                unit='tanh',
                                init_W=init_W,
                                init_b=init_b)
